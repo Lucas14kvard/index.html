@@ -3,140 +3,268 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lucas 14kvard</title>
+<title>Lucas 14kvard - Профиль</title>
 <style>
+  :root {
+    --purple: #7b2ff7;
+    --pink-purple: #f107a3;
+    --green-btn: #4caf50;
+    --bg-gray: #1e1e2f;
+    --text-light: #eee;
+  }
   body {
-    background: linear-gradient(135deg, #6a0dad, #d147b1);
+    margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: white;
-    margin: 0; padding: 0;
+    background: linear-gradient(135deg, var(--purple), var(--pink-purple));
+    color: var(--text-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
   header {
-    background: #3c0054;
-    padding: 1em;
+    position: relative;
+    height: 180px;
+    background: #4a2a7c;
     display: flex;
     align-items: center;
-    gap: 1em;
+    justify-content: center;
   }
-  header img.avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid #72f53c; /* зелёная рамка */
+  #banner {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
     object-fit: cover;
+    opacity: 0.4;
+    cursor: pointer;
   }
-  header h1 {
-    flex-grow: 1;
-    margin: 0;
-    font-weight: 700;
+  #avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--pink-purple);
+    object-fit: cover;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: all 0.5s ease;
+  }
+  #avatar.left-top {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 70px;
+    height: 70px;
+    border: 3px solid var(--green-btn);
+  }
+  nav {
+    background: #2b1e4a;
+    display: flex;
+    justify-content: center;
   }
   nav button {
-    background: #72f53c; /* зелёный */
+    background: var(--green-btn);
     border: none;
-    padding: 0.6em 1em;
-    margin-left: 0.5em;
-    border-radius: 6px;
-    font-weight: 600;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
     cursor: pointer;
-    color: #1b1b1b;
-    transition: background 0.3s ease;
+    margin: 8px;
+    border-radius: 6px;
+    transition: background 0.3s;
   }
   nav button:hover, nav button.active {
-    background: #4a9e17;
-    color: white;
+    background: #36b233;
   }
   main {
-    padding: 1em 2em;
+    flex: 1;
+    padding: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(30, 30, 47, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 0 10px #0008;
   }
-  .tab {
-    display: none;
+  textarea, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
   }
-  .tab.active {
-    display: block;
-  }
-  /* Немного стили для контента */
-  .profile-text {
-    margin-top: 1em;
-    font-size: 1.2em;
-    font-style: italic;
+  .post {
+    background: #3b2f6e;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <input type="file" id="avatarInput" style="display:none" accept="image/*" />
-  <img src="https://via.placeholder.com/60?text=Avatar" alt="Аватар" class="avatar" id="avatar" />
-  <h1>Lucas 14kvard</h1>
-  <nav>
-    <button class="tab-btn active" data-tab="profile">Профиль</button>
-    <button class="tab-btn" data-tab="general">Общее</button>
-    <button class="tab-btn" data-tab="add">Добавить</button>
-  </nav>
+  <img id="banner" src="" alt="Banner" title="Кликни, чтобы сменить баннер" />
+  <img id="avatar" src="" alt="Аватарка" title="Кликни, чтобы сменить аватар" />
+  <input type="file" id="bannerInput" accept="image/*" style="display:none" />
+  <input type="file" id="avatarInput" accept="image/*" style="display:none" />
 </header>
 
+<nav>
+  <button id="btnProfile" class="active">Профиль</button>
+  <button id="btnGeneral">Общее</button>
+  <button id="btnAdd">Добавить</button>
+</nav>
+
 <main>
-  <section id="profile" class="tab active">
+  <section id="profileSection">
     <h2>Профиль</h2>
-    <p class="profile-text">Мечтаю построить аквапарк для всех булочек</p>
+    <p><strong>Статус:</strong></p>
+    <textarea id="statusText" rows="2" placeholder="Напишите ваш статус..."></textarea>
   </section>
-  <section id="general" class="tab">
+  <section id="generalSection" style="display:none;">
     <h2>Общее</h2>
-    <p>Общая информация и новости.</p>
+    <div id="postsContainer"></div>
   </section>
-  <section id="add" class="tab">
-    <h2>Добавить</h2>
-    <p>Здесь можно будет добавлять новые записи.</p>
+  <section id="addSection" style="display:none;">
+    <h2>Добавить пост</h2>
+    <textarea id="postText" rows="4" placeholder="Напишите новый пост..."></textarea>
+    <button id="addPostBtn" style="margin-top:10px; background: var(--green-btn); color:#fff; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">Добавить</button>
   </section>
 </main>
 
 <script>
-  // Переключение вкладок
-  const buttons = document.querySelectorAll('.tab-btn');
-  const tabs = document.querySelectorAll('.tab');
+  const avatar = document.getElementById('avatar');
+  const banner = document.getElementById('banner');
+  const avatarInput = document.getElementById('avatarInput');
+  const bannerInput = document.getElementById('bannerInput');
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Активная кнопка
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      // Показываем вкладку
-      const tabId = btn.dataset.tab;
-      tabs.forEach(t => {
-        t.classList.toggle('active', t.id === tabId);
-      });
+  const btnProfile = document.getElementById('btnProfile');
+  const btnGeneral = document.getElementById('btnGeneral');
+  const btnAdd = document.getElementById('btnAdd');
+
+  const profileSection = document.getElementById('profileSection');
+  const generalSection = document.getElementById('generalSection');
+  const addSection = document.getElementById('addSection');
+
+  const statusText = document.getElementById('statusText');
+  const postsContainer = document.getElementById('postsContainer');
+  const postText = document.getElementById('postText');
+  const addPostBtn = document.getElementById('addPostBtn');
+
+  // Загрузка данных из localStorage
+  function loadData() {
+    const savedAvatar = localStorage.getItem('avatar');
+    if (savedAvatar) avatar.src = savedAvatar;
+    else avatar.src = 'https://via.placeholder.com/120?text=Avatar';
+
+    const savedBanner = localStorage.getItem('banner');
+    if (savedBanner) banner.src = savedBanner;
+    else banner.src = 'https://via.placeholder.com/800x180/4a2a7c/ffffff?text=Banner';
+
+    const savedStatus = localStorage.getItem('status');
+    if (savedStatus) statusText.value = savedStatus;
+
+    const savedPosts = JSON.parse(localStorage.getItem('posts')) || [];
+    postsContainer.innerHTML = '';
+    savedPosts.forEach(post => {
+      addPostToDOM(post);
     });
+  }
+
+  // Сохранить статус
+  statusText.addEventListener('input', () => {
+    localStorage.setItem('status', statusText.value);
   });
 
-  // Загрузка аватара
-  const avatarInput = document.getElementById('avatarInput');
-  const avatar = document.getElementById('avatar');
-
+  // Открыть выбор файла аватарки
   avatar.addEventListener('click', () => {
     avatarInput.click();
   });
-
-  avatarInput.addEventListener('change', () => {
-    const file = avatarInput.files[0];
+  avatarInput.addEventListener('change', e => {
+    const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        avatar.src = reader.result;
-        // Сохраняем в localStorage
-        localStorage.setItem('avatarImage', reader.result);
+      reader.onload = e => {
+        avatar.src = e.target.result;
+        localStorage.setItem('avatar', e.target.result);
       };
       reader.readAsDataURL(file);
     }
   });
 
-  // При загрузке страницы устанавливаем сохранённый аватар
-  window.addEventListener('load', () => {
-    const savedAvatar = localStorage.getItem('avatarImage');
-    if (savedAvatar) {
-      avatar.src = savedAvatar;
+  // Открыть выбор файла баннера
+  banner.addEventListener('click', () => {
+    bannerInput.click();
+  });
+  bannerInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        banner.src = e.target.result;
+        localStorage.setItem('banner', e.target.result);
+      };
+      reader.readAsDataURL(file);
     }
   });
+
+  // Добавление поста
+  addPostBtn.addEventListener('click', () => {
+    const text = postText.value.trim();
+    if (!text) {
+      alert('Пост не может быть пустым');
+      return;
+    }
+    const posts = JSON.parse(localStorage.getItem('posts')) || [];
+    posts.push(text);
+    localStorage.setItem('posts', JSON.stringify(posts));
+    addPostToDOM(text);
+    postText.value = '';
+    // Переключиться на вкладку Общее
+    showSection('general');
+  });
+
+  function addPostToDOM(text) {
+    const div = document.createElement('div');
+    div.className = 'post';
+    div.textContent = text;
+    postsContainer.appendChild(div);
+  }
+
+  // Переключение вкладок
+  function showSection(section) {
+    btnProfile.classList.remove('active');
+    btnGeneral.classList.remove('active');
+    btnAdd.classList.remove('active');
+    profileSection.style.display = 'none';
+    generalSection.style.display = 'none';
+    addSection.style.display = 'none';
+
+    avatar.classList.remove('left-top');
+
+    if (section === 'profile') {
+      btnProfile.classList.add('active');
+      profileSection.style.display = 'block';
+      avatar.style.position = 'relative';
+      avatar.style.width = '120px';
+      avatar.style.height = '120px';
+    } else if (section === 'general') {
+      btnGeneral.classList.add('active');
+      generalSection.style.display = 'block';
+      avatar.classList.add('left-top');
+    } else if (section === 'add') {
+      btnAdd.classList.add('active');
+      addSection.style.display = 'block';
+      avatar.classList.add('left-top');
+    }
+  }
+
+  btnProfile.addEventListener('click', () => showSection('profile'));
+  btnGeneral.addEventListener('click', () => showSection('general'));
+  btnAdd.addEventListener('click', () => showSection('add'));
+
+  // Инициализация
+  loadData();
+  showSection('profile');
 </script>
 
 </body>
