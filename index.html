@@ -41,16 +41,17 @@
   /* Баннер и профиль */
   .profile-header {
     position: relative;
-    height: 180px;
+    height: 350px;
     background: #551a8b;
     border-radius: 12px;
     overflow: hidden;
   }
   .banner-image {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 180px;
+    top: 0; left: 0; width: 100%; height: 100%;
     object-fit: cover;
-    filter: brightness(0.7);
+    filter: brightness(0.6);
+    transition: opacity 0.3s ease;
   }
   .banner-overlay {
     position: absolute;
@@ -79,13 +80,14 @@
     background: #222;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 0 10px #2a7b19;
   }
   /* Центрирование аватарки для профиля */
   .profile .avatar-wrapper {
-    top: 50%;
+    top: 220px;
     left: 50%;
-    width: 140px; height: 140px;
-    transform: translate(-50%, -50%);
+    width: 160px; height: 160px;
+    transform: translateX(-50%);
     z-index: 15;
   }
   /* Аватарка в левом верхнем углу для остальных вкладок */
@@ -95,6 +97,7 @@
     width: 80px; height: 80px;
     transform: none;
     z-index: 15;
+    box-shadow: 0 0 6px #2a7b19;
   }
   .avatar-wrapper img {
     width: 100%; height: 100%; object-fit: cover;
@@ -108,10 +111,10 @@
   }
   /* Ник рядом с аватаркой */
   .profile .nickname {
-    top: calc(50% + 90px);
+    top: 390px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 24px;
+    font-size: 28px;
     z-index: 15;
   }
   .other .nickname {
@@ -125,13 +128,14 @@
   }
   /* Контент вкладок */
   .tab-content {
-    margin-top: 220px;
+    margin-top: 80px;
   }
   /* Общие посты */
   .posts {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+    margin-top: 20px;
   }
   .post {
     background: rgba(0,0,0,0.3);
@@ -156,6 +160,7 @@
     padding: 0 10px 10px;
     font-size: 14px;
     color: #a0e7a0;
+    font-style: italic;
   }
   /* Форма добавления */
   form {
@@ -194,13 +199,6 @@
   form button:hover {
     background: #2a7b19;
   }
-  /* Подписи и хештеги в постах */
-  .post-caption {
-    font-size: 16px;
-  }
-  .post-hashtags {
-    font-style: italic;
-  }
 </style>
 </head>
 <body>
@@ -223,7 +221,7 @@
       </div>
       <div class="avatar-wrapper" id="avatar-wrapper-profile" title="Нажмите чтобы сменить аватар">
         <img src="" alt="Аватар" id="profile-avatar" />
-        <input type="file" id="avatar-input-profile" accept="image/*" style="display:none" />
+        <input type="file" id="avatar-input-profile" accept="image/*" />
       </div>
       <div class="nickname" id="profile-nickname">Lucas_14kvard</div>
     </div>
@@ -243,7 +241,4 @@
     <div class="avatar-wrapper" id="avatar-wrapper-add" title="Ваш аватар">
       <img src="" alt="Аватар" id="add-avatar" />
     </div>
-    <div class="nickname" id="add-nickname">Lucas_14kvard</div>
-    <form id="add-post-form">
-      <label for="post-image">Выберите фото для поста</label>
-      <input type="file" id="post-image" accept="image
+    <div class="nickname" id="add-nickname">Lucas_
