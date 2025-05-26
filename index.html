@@ -3,19 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lucas_14kvard Profile</title>
+<title>Lucas_14kvard Профиль</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
   body {
-    margin: 0; background: linear-gradient(135deg, #7c4dff, #ff7acc);
+    margin: 0;
+    background: linear-gradient(135deg, #7c4dff, #ff7acc);
     font-family: 'Orbitron', monospace;
     color: white;
     min-height: 100vh;
-    display: flex; flex-direction: column;
+    display: flex;
+    flex-direction: column;
   }
   header {
     position: relative;
-    height: 300px;
+    height: 280px;
     background: #4b1d64;
     overflow: hidden;
   }
@@ -26,10 +28,10 @@
     filter: brightness(0.6);
   }
   #banner.empty {
-    background: #59107d; /* fallback if no banner */
+    background: #59107d; /* цвет, если баннера нет */
   }
   #bannerRemoveBtn {
-    position: absolute; top: 5px; right: 5px;
+    position: absolute; top: 8px; right: 8px;
     background: #0a870a;
     border: none;
     padding: 5px 10px;
@@ -37,6 +39,7 @@
     font-weight: bold;
     border-radius: 5px;
     z-index: 10;
+    display: none;
   }
   #avatarWrapper {
     position: absolute;
@@ -67,6 +70,11 @@
     font-weight: bold;
     color: #0a870a;
     text-shadow: 0 0 6px black;
+    outline: none;
+    cursor: text;
+    min-width: 200px;
+    max-width: 320px;
+    text-align: center;
   }
   main {
     flex: 1;
@@ -114,6 +122,11 @@
     border-radius: 10px;
     border: none;
     margin-top: 15px;
+    color: #0a870a;
+    background: #eee;
+    font-family: 'Orbitron', monospace;
+    font-weight: bold;
+    outline: none;
   }
   /* ОБЩЕЕ */
   #postsList {
@@ -164,6 +177,8 @@
     border-radius: 10px;
     border: none;
     resize: vertical;
+    font-family: 'Orbitron', monospace;
+    font-weight: bold;
   }
   #addForm input[type="file"] {
     font-size: 1rem;
@@ -189,12 +204,15 @@
 
 <header>
   <img id="banner" class="empty" alt="Banner" />
-  <button id="bannerRemoveBtn" title="Удалить баннер" style="display:none;">✕</button>
+  <button id="bannerRemoveBtn" title="Удалить баннер">✕</button>
 
   <label id="avatarWrapper" title="Нажмите, чтобы сменить аватар">
     <img id="avatar" class="empty" alt="Avatar" />
     <input type="file" id="avatarInput" accept="image/*" style="display:none" />
   </label>
+
+  <input type="file" id="bannerInput" accept="image/*" style="display:none" />
+  
   <div id="username" contenteditable="true" spellcheck="false" title="Нажмите, чтобы изменить ник">Lucas_14kvard</div>
 </header>
 
@@ -207,6 +225,9 @@
 <main>
   <section id="profileSection" class="active">
     <input id="statusInput" type="text" placeholder="Введите статус..." />
+    <div style="margin-top:20px;">
+      <button id="changeBannerBtn" style="background:#0a870a; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;">Сменить баннер</button>
+    </div>
   </section>
 
   <section id="generalSection">
@@ -239,18 +260,91 @@
 
   const banner = document.getElementById('banner');
   const bannerRemoveBtn = document.getElementById('bannerRemoveBtn');
+  const bannerInput = document.getElementById('bannerInput');
+  const changeBannerBtn = document.getElementById('changeBannerBtn');
 
   const username = document.getElementById('username');
   const statusInput = document.getElementById('statusInput');
 
   const postsList = document.getElementById('postsList');
+
   const addForm = document.getElementById('addForm');
   const postCaption = document.getElementById('postCaption');
   const postHashtags = document.getElementById('postHashtags');
   const postImageInput = document.getElementById('postImageInput');
 
-  // Вкладки переключение
+  // Переключение вкладок
   function setActiveTab(tab) {
     tabProfile.classList.remove('active');
     tabGeneral.classList.remove('active');
-    tabAdd.classList
+    tabAdd.classList.remove('active');
+    profileSection.classList.remove('active');
+    generalSection.classList.remove('active');
+    addSection.classList.remove('active');
+
+    if (tab === 'profile') {
+      tabProfile.classList.add('active');
+      profileSection.classList.add('active');
+    } else if (tab === 'general') {
+      tabGeneral.classList.add('active');
+      generalSection.classList.add('active');
+    } else if (tab === 'add') {
+      tabAdd.classList.add('active');
+      addSection.classList.add('active');
+    }
+  }
+  tabProfile.onclick = () => setActiveTab('profile');
+  tabGeneral.onclick = () => setActiveTab('general');
+  tabAdd.onclick = () => setActiveTab('add');
+
+  // localStorage ключи
+  const LS_AVATAR = 'profile_avatar';
+  const LS_BANNER = 'profile_banner';
+  const LS_NICKNAME = 'profile_nickname';
+  const LS_STATUS = 'profile_status';
+  const LS_POSTS = 'profile_posts';
+
+  // Загрузить данные из localStorage
+  function loadProfile() {
+    // Аватар
+    const avatarData = localStorage.getItem(LS_AVATAR);
+    if (avatarData) {
+      avatar.src = avatarData;
+      avatar.classList.remove('empty');
+    } else {
+      avatar.src = '';
+      avatar.classList.add('empty');
+    }
+    // Баннер
+    const bannerData = localStorage.getItem(LS_BANNER);
+    if (bannerData) {
+      banner.src = bannerData;
+      banner.classList.remove('empty');
+      bannerRemoveBtn.style.display = 'block';
+    } else {
+      banner.src = '';
+      banner.classList.add('empty');
+      bannerRemoveBtn.style.display = 'none';
+    }
+    // Ник
+    const nickname = localStorage.getItem(LS_NICKNAME);
+    if (nickname) {
+      username.textContent = nickname;
+    }
+    // Статус
+    const status = localStorage.getItem(LS_STATUS);
+    if (status) {
+      statusInput.value = status;
+    }
+    // Посты
+    loadPosts();
+  }
+
+  // Сохранить аватар
+  function saveAvatar(dataUrl) {
+    localStorage.setItem(LS_AVATAR, dataUrl);
+  }
+
+  // Сохранить баннер
+  function saveBanner(dataUrl) {
+    localStorage.setItem(LS_BANNER, dataUrl
