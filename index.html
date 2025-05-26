@@ -6,24 +6,18 @@
 <title>Профиль Lucas_14kvard</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
-
-  * {
-    box-sizing: border-box;
-  }
   body {
     margin: 0; padding: 0;
     font-family: 'Orbitron', monospace;
     background: linear-gradient(135deg, #7c4dff, #ff7acc);
     color: white;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
     align-items: center;
   }
   header {
     position: relative;
-    width: 100%;
-    max-width: 900px;
+    width: 100%; max-width: 900px;
     height: 280px;
     background: #4b1d64;
     border-radius: 15px;
@@ -32,11 +26,12 @@
   }
   #banner {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 140px;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 900px;
+    height: 120px;
     object-fit: cover;
-    filter: brightness(0.65);
+    filter: brightness(0.6);
   }
   #banner.empty {
     background: #59107d;
@@ -46,43 +41,47 @@
   }
   #avatarWrapper {
     position: absolute;
-    top: 100px;
+    bottom: 110px;
     left: 50%;
     transform: translateX(-50%);
     width: 140px;
     height: 140px;
     border-radius: 50%;
     border: 5px solid #0a870a;
-    background: #999;
+    background: #ddd;
     overflow: hidden;
     cursor: pointer;
-    box-shadow: 0 0 10px #0a870a;
   }
   #avatar {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
-    display: block;
+    border-radius: 50%;
   }
   #avatar.empty {
-    background: #444;
+    background: #999;
   }
-  #username {
+  #avatarInput {
+    display: none;
+  }
+  #nickname {
     position: absolute;
-    top: 245px;
+    bottom: 260px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 1.8rem;
     font-weight: bold;
     color: #0a870a;
     text-shadow: 0 0 6px black;
-    user-select: none;
+    outline: none;
+    cursor: text;
+    min-width: 220px;
+    max-width: 320px;
+    text-align: center;
   }
 
   nav {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 900px;
+    margin-top: 80px;
+    width: 100%; max-width: 900px;
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -104,12 +103,9 @@
   }
 
   main {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 900px;
+    margin-top: 30px;
+    width: 100%; max-width: 900px;
     flex: 1;
-    min-height: 300px;
-    padding-bottom: 30px;
   }
 
   section {
@@ -122,37 +118,28 @@
   #profileSection {
     text-align: center;
   }
-  #statusInput {
-    width: 80%;
-    max-width: 400px;
-    font-size: 1.2rem;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    margin-top: 15px;
-    color: #0a870a;
+
+  #status {
+    margin: 0 auto 20px;
     background: #eee;
+    color: #0a870a;
     font-family: 'Orbitron', monospace;
     font-weight: bold;
-    outline: none;
-  }
-  #statusSaveBtn {
-    margin-top: 10px;
-    background: #0a870a;
-    border: none;
-    padding: 10px 30px;
+    padding: 10px;
+    max-width: 500px;
     border-radius: 10px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1.1rem;
+    outline: none;
+    cursor: text;
+    user-select: text;
   }
-  #postsList {
+
+  #postsList, #allPostsList {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
   }
+
   .postCard {
     background: rgba(0,0,0,0.3);
     border-radius: 15px;
@@ -179,17 +166,15 @@
     padding: 6px 10px 10px;
   }
 
-  #addSection {
+  #addSection form {
     max-width: 500px;
     margin: 0 auto;
-  }
-  #addForm {
     display: flex;
     flex-direction: column;
     gap: 15px;
   }
-  #addForm textarea,
-  #addForm input[type="text"] {
+  #addSection textarea,
+  #addSection input[type="text"] {
     padding: 10px;
     font-size: 1.1rem;
     border-radius: 10px;
@@ -198,10 +183,10 @@
     font-family: 'Orbitron', monospace;
     font-weight: bold;
   }
-  #addForm input[type="file"] {
+  #addSection input[type="file"] {
     color: white;
   }
-  #addForm button {
+  #addSection button {
     background: #0a870a;
     border: none;
     color: white;
@@ -212,30 +197,23 @@
     font-weight: bold;
     transition: background 0.3s;
   }
-  #addForm button:hover {
+  #addSection button:hover {
     background: #12d412;
-  }
-
-  /* Scroll for posts */
-  #postsList {
-    max-height: 500px;
-    overflow-y: auto;
-    padding-right: 10px;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <img id="banner" class="empty" alt="Баннер профиля" />
+  <img id="banner" class="empty" alt="Banner" />
   <input type="file" id="bannerInput" accept="image/*" />
-
+  
   <label id="avatarWrapper" title="Нажмите, чтобы сменить аватар">
-    <img id="avatar" class="empty" alt="Аватарка" />
+    <img id="avatar" class="empty" alt="Avatar" />
     <input type="file" id="avatarInput" accept="image/*" />
   </label>
 
-  <div id="username" title="Никнейм">Lucas_14kvard</div>
+  <div id="nickname" contenteditable="true" spellcheck="false" title="Нажмите, чтобы изменить ник">Lucas_14kvard</div>
 </header>
 
 <nav>
@@ -246,272 +224,260 @@
 
 <main>
   <section id="profileSection" class="active">
-    <input id="statusInput" type="text" placeholder="Введите статус..." maxlength="100" />
-    <button id="statusSaveBtn">Сохранить статус</button>
-    <h2 style="margin-top:30px;">Ваши посты</h2>
-    <div id="userPostsList"></div>
-  </section>
-
-  <section id="generalSection">
-    <h2>Общие посты</h2>
+    <div id="status" contenteditable="true" spellcheck="false" title="Нажмите, чтобы изменить статус">Привет! Я здесь.</div>
+    <h3>Мои посты</h3>
     <div id="postsList"></div>
   </section>
 
+  <section id="generalSection">
+    <h3>Общие посты</h3>
+    <div id="allPostsList"></div>
+  </section>
+
   <section id="addSection">
-    <h2>Добавить пост</h2>
     <form id="addForm">
       <textarea id="postCaption" placeholder="Подпись к фото..." rows="3" required></textarea>
       <input id="postHashtags" type="text" placeholder="Хештеги через пробел, например: #булочки #аквапарк" />
       <input id="postImageInput" type="file" accept="image/*" required />
-      <button type="submit">Опубликовать</button>
+      <button type="submit">Добавить пост</button>
     </form>
   </section>
 </main>
 
 <script>
   // Элементы
-  const banner = document.getElementById('banner');
-  const bannerInput = document.getElementById('bannerInput');
-  const avatarWrapper = document.getElementById('avatarWrapper');
-  const avatar = document.getElementById('avatar');
   const avatarInput = document.getElementById('avatarInput');
-  const username = document.getElementById('username');
-  const statusInput = document.getElementById('statusInput');
-  const statusSaveBtn = document.getElementById('statusSaveBtn');
-  const userPostsList
-// Продолжение скрипта
+  const avatarImg = document.getElementById('avatar');
 
-const tabProfile = document.getElementById('tabProfile');
-const tabGeneral = document.getElementById('tabGeneral');
-const tabAdd = document.getElementById('tabAdd');
+  const bannerInput = document.getElementById('bannerInput');
+  const bannerImg = document.getElementById('banner');
 
-const profileSection = document.getElementById('profileSection');
-const generalSection = document.getElementById('generalSection');
-const addSection = document.getElementById('addSection');
+  const nickname = document.getElementById('nickname');
+  const status = document.getElementById('status');
 
-const userPostsList = document.getElementById('userPostsList');
-const postsList = document.getElementById('postsList');
+  const tabProfile = document.getElementById('tabProfile');
+  const tabGeneral = document.getElementById('tabGeneral');
+  const tabAdd = document.getElementById('tabAdd');
 
-const addForm = document.getElementById('addForm');
-const postCaption = document.getElementById('postCaption');
-const postHashtags = document.getElementById('postHashtags');
-const postImageInput = document.getElementById('postImageInput');
+  const profileSection = document.getElementById('profileSection');
+  const generalSection = document.getElementById('generalSection');
+  const addSection = document.getElementById('addSection');
 
-let userStatus = '';
-let userPosts = [];    // Посты текущего пользователя
-let generalPosts = []; // Все посты (включая пользователя)
+  const postsList = document.getElementBy
+<script>
+  // Продолжаем скрипт
 
-// Инициализация — загрузка из localStorage
-function loadData() {
-  const statusLS = localStorage.getItem('userStatus');
-  if (statusLS) {
-    userStatus = statusLS;
-    statusInput.value = userStatus;
+  const postsList = document.getElementById('postsList');
+  const allPostsList = document.getElementById('allPostsList');
+
+  const addForm = document.getElementById('addForm');
+  const postCaption = document.getElementById('postCaption');
+  const postHashtags = document.getElementById('postHashtags');
+  const postImageInput = document.getElementById('postImageInput');
+
+  // Хранение данных (локально)
+  // Структура: { avatar, banner, nickname, status, userPosts: [], allPosts: [] }
+  let appData = {
+    avatar: null,
+    banner: null,
+    nickname: nickname.textContent,
+    status: status.textContent,
+    userPosts: [],
+    allPosts: []
+  };
+
+  // Загрузка из localStorage при старте
+  function loadFromStorage() {
+    const data = localStorage.getItem('appData');
+    if (data) {
+      try {
+        appData = JSON.parse(data);
+        if (appData.avatar) {
+          avatarImg.src = appData.avatar;
+          avatarImg.classList.remove('empty');
+        }
+        if (appData.banner) {
+          bannerImg.src = appData.banner;
+          bannerImg.classList.remove('empty');
+        }
+        nickname.textContent = appData.nickname || 'Lucas_14kvard';
+        status.textContent = appData.status || 'Привет! Я здесь.';
+        renderUserPosts();
+        renderAllPosts();
+      } catch (e) {
+        console.error('Ошибка загрузки данных', e);
+      }
+    }
   }
 
-  const userPostsLS = localStorage.getItem('userPosts');
-  if (userPostsLS) {
-    userPosts = JSON.parse(userPostsLS);
+  // Сохранение в localStorage
+  function saveToStorage() {
+    localStorage.setItem('appData', JSON.stringify(appData));
   }
 
-  const generalPostsLS = localStorage.getItem('generalPosts');
-  if (generalPostsLS) {
-    generalPosts = JSON.parse(generalPostsLS);
-  }
-
-  const avatarLS = localStorage.getItem('avatar');
-  if (avatarLS) {
-    avatar.src = avatarLS;
-    avatar.classList.remove('empty');
-  } else {
-    avatar.src = '';
-    avatar.classList.add('empty');
-  }
-
-  const bannerLS = localStorage.getItem('banner');
-  if (bannerLS) {
-    banner.src = bannerLS;
-    banner.classList.remove('empty');
-  } else {
-    banner.src = '';
-    banner.classList.add('empty');
-  }
-}
-loadData();
-
-// Сохранение в localStorage
-function saveData() {
-  localStorage.setItem('userStatus', userStatus);
-  localStorage.setItem('userPosts', JSON.stringify(userPosts));
-  localStorage.setItem('generalPosts', JSON.stringify(generalPosts));
-}
-
-// Обновление отображения постов пользователя
-function renderUserPosts() {
-  userPostsList.innerHTML = '';
-  if (userPosts.length === 0) {
-    userPostsList.innerHTML = '<p>Пока нет постов.</p>';
-    return;
-  }
-  userPosts.forEach(post => {
-    const postEl = createPostElement(post);
-    userPostsList.appendChild(postEl);
+  // Обработчик смены аватара
+  avatarInput.addEventListener('change', () => {
+    const file = avatarInput.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        avatarImg.src = e.target.result;
+        avatarImg.classList.remove('empty');
+        appData.avatar = e.target.result;
+        saveToStorage();
+      };
+      reader.readAsDataURL(file);
+    }
+    // Сброс input чтобы можно было выбрать тот же файл еще раз
+    avatarInput.value = '';
   });
-}
 
-// Обновление отображения всех постов
-function renderGeneralPosts() {
-  postsList.innerHTML = '';
-  if (generalPosts.length === 0) {
-    postsList.innerHTML = '<p>Пока нет общих постов.</p>';
-    return;
-  }
-  generalPosts.forEach(post => {
-    const postEl = createPostElement(post);
-    postsList.appendChild(postEl);
+  // При клике по аватару открываем выбор файла
+  document.getElementById('avatarWrapper').addEventListener('click', () => {
+    avatarInput.click();
   });
-}
 
-// Создание DOM элемента поста
-function createPostElement(post) {
-  const card = document.createElement('div');
-  card.className = 'postCard';
+  // Обработчик смены баннера
+  bannerImg.addEventListener('click', () => {
+    bannerInput.click();
+  });
 
-  const img = document.createElement('img');
-  img.className = 'postImage';
-  img.src = post.image;
-  img.alt = 'Фото поста';
-  card.appendChild(img);
+  bannerInput.addEventListener('change', () => {
+    const file = bannerInput.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        bannerImg.src = e.target.result;
+        bannerImg.classList.remove('empty');
+        appData.banner = e.target.result;
+        saveToStorage();
+      };
+      reader.readAsDataURL(file);
+    }
+    bannerInput.value = '';
+  });
 
-  const caption = document.createElement('div');
-  caption.className = 'postCaption';
-  caption.textContent = post.caption;
-  card.appendChild(caption);
+  // Никнейм редактируемый
+  nickname.addEventListener('input', () => {
+    appData.nickname = nickname.textContent.trim() || 'Lucas_14kvard';
+    saveToStorage();
+  });
 
-  if (post.hashtags && post.hashtags.length > 0) {
+  // Статус редактируемый
+  status.addEventListener('input', () => {
+    appData.status = status.textContent.trim() || 'Привет! Я здесь.';
+    saveToStorage();
+  });
+
+  // Переключение вкладок
+  function activateTab(tabName) {
+    // Убираем все активные
+    tabProfile.classList.remove('active');
+    tabGeneral.classList.remove('active');
+    tabAdd.classList.remove('active');
+    profileSection.classList.remove('active');
+    generalSection.classList.remove('active');
+    addSection.classList.remove('active');
+
+    if (tabName === 'profile') {
+      tabProfile.classList.add('active');
+      profileSection.classList.add('active');
+    } else if (tabName === 'general') {
+      tabGeneral.classList.add('active');
+      generalSection.classList.add('active');
+    } else if (tabName === 'add') {
+      tabAdd.classList.add('active');
+      addSection.classList.add('active');
+    }
+  }
+
+  tabProfile.addEventListener('click', () => activateTab('profile'));
+  tabGeneral.addEventListener('click', () => activateTab('general'));
+  tabAdd.addEventListener('click', () => activateTab('add'));
+
+  // Отрисовка постов пользователя
+  function renderUserPosts() {
+    postsList.innerHTML = '';
+    if (appData.userPosts.length === 0) {
+      postsList.innerHTML = '<p>Пока нет постов</p>';
+      return;
+    }
+    appData.userPosts.forEach(post => {
+      postsList.appendChild(createPostElement(post));
+    });
+  }
+
+  // Отрисовка всех постов
+  function renderAllPosts() {
+    allPostsList.innerHTML = '';
+    if (appData.allPosts.length === 0) {
+      allPostsList.innerHTML = '<p>Пока нет общих постов</p>';
+      return;
+    }
+    appData.allPosts.forEach(post => {
+      allPostsList.appendChild(createPostElement(post));
+    });
+  }
+
+  // Создание DOM-элемента поста
+  function createPostElement(post) {
+    const postDiv = document.createElement('div');
+    postDiv.className = 'postCard';
+
+    const img = document.createElement('img');
+    img.className = 'postImage';
+    img.src = post.image;
+    img.alt = 'Пост';
+
+    const caption = document.createElement('div');
+    caption.className = 'postCaption';
+    caption.textContent = post.caption;
+
     const hashtags = document.createElement('div');
     hashtags.className = 'postHashtags';
-    hashtags.textContent = post.hashtags.join(' ');
-    card.appendChild(hashtags);
+    hashtags.textContent = post.hashtags;
+
+    postDiv.appendChild(img);
+    postDiv.appendChild(caption);
+    if (post.hashtags) postDiv.appendChild(hashtags);
+
+    return postDiv;
   }
 
-  return card;
-}
+  // Обработка отправки формы добавления поста
+  addForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const file = postImageInput.files[0];
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Пожалуйста, выберите изображение');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = event => {
+      const newPost = {
+        caption: postCaption.value.trim(),
+        hashtags: postHashtags.value.trim(),
+        image: event.target.result
+      };
+      appData.userPosts.unshift(newPost);
+      appData.allPosts.unshift(newPost);
 
-// Обработка смены аватара
-avatarWrapper.addEventListener('click', () => {
-  avatarInput.click();
-});
-avatarInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    avatar.src = reader.result;
-    avatar.classList.remove('empty');
-    localStorage.setItem('avatar', reader.result);
-  };
-  reader.readAsDataURL(file);
-});
+      saveToStorage();
+      renderUserPosts();
+      renderAllPosts();
 
-// Обработка смены баннера
-banner.addEventListener('click', () => {
-  bannerInput.click();
-});
-bannerInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    banner.src = reader.result;
-    banner.classList.remove('empty');
-    localStorage.setItem('banner', reader.result);
-  };
-  reader.readAsDataURL(file);
-});
+      // Очистить форму
+      postCaption.value = '';
+      postHashtags.value = '';
+      postImageInput.value = '';
 
-// Статус сохранить
-statusSaveBtn.addEventListener('click', () => {
-  userStatus = statusInput.value.trim();
-  saveData();
-  alert('Статус сохранён!');
-});
-
-// Переключение вкладок
-function switchTab(tab) {
-  tabProfile.classList.remove('active');
-  tabGeneral.classList.remove('active');
-  tabAdd.classList.remove('active');
-  profileSection.classList.remove('active');
-  generalSection.classList.remove('active');
-  addSection.classList.remove('active');
-
-  if (tab === 'profile') {
-    tabProfile.classList.add('active');
-    profileSection.classList.add('active');
-  } else if (tab === 'general') {
-    tabGeneral.classList.add('active');
-    generalSection.classList.add('active');
-  } else if (tab === 'add') {
-    tabAdd.classList.add('active');
-    addSection.classList.add('active');
-  }
-}
-
-tabProfile.addEventListener('click', () => switchTab('profile'));
-tabGeneral.addEventListener('click', () => switchTab('general'));
-tabAdd.addEventListener('click', () => switchTab('add'));
-
-// Обработка добавления нового поста
-addForm.addEventListener('submit', e => {
-  e.preventDefault();
-
-  const captionText = postCaption.value.trim();
-  const hashtagsText = postHashtags.value.trim();
-  const file = postImageInput.files[0];
-
-  if (!file) {
-    alert('Пожалуйста, выберите фото для поста.');
-    return;
-  }
-  if (captionText.length === 0) {
-    alert('Пожалуйста, добавьте подпись к посту.');
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    const newPost = {
-      caption: captionText,
-      hashtags: hashtagsText ? hashtagsText.split(/\s+/) : [],
-      image: reader.result,
-      author: username.textContent,
-      date: new Date().toISOString()
+      // Переключаемся на профиль
+      activateTab('profile');
     };
+    reader.readAsDataURL(file);
+  });
 
-    // Добавляем пост в пользовательские посты и общие
-    userPosts.unshift(newPost);
-    generalPosts.unshift(newPost);
-
-    saveData();
-    renderUserPosts();
-    renderGeneralPosts();
-
-    // Очистка формы
-    addForm.reset();
-
-    // Переключаем на профиль, чтобы увидеть новый пост
-    switchTab('profile');
-  };
-  reader.readAsDataURL(file);
-});
-
-// Инициализация рендера
-renderUserPosts();
-renderGeneralPosts();
+  // Начальная загрузка
+  loadFromStorage();
 </script>
-
-</body>
-</html>
-
 
