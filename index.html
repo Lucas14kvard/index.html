@@ -3,242 +3,254 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lucas_14kvard - Профиль</title>
+<title>Lucas_14kvard Profile</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
   body {
-    margin: 0; padding: 0; font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #7b2ff7, #f107a3);
-    color: #eee;
+    margin: 0; background: linear-gradient(135deg, #7c4dff, #ff7acc);
+    font-family: 'Orbitron', monospace;
+    color: white;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
   }
   header {
-    background: #2e2e2e;
-    padding: 10px 20px;
-    display: flex;
-    gap: 10px;
-  }
-  header button {
-    background: #3a9d23;
-    border: none;
-    color: #fff;
-    font-weight: 700;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: background 0.3s ease;
-  }
-  header button:hover, header button.active {
-    background: #2a7b19;
-  }
-  main {
-    flex-grow: 1;
-    padding: 20px;
     position: relative;
-  }
-  /* Баннер и профиль */
-  .profile-header {
-    position: relative;
-    height: 350px;
-    background: #551a8b;
-    border-radius: 12px;
+    height: 300px;
+    background: #4b1d64;
     overflow: hidden;
   }
-  .banner-image {
+  #banner {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     object-fit: cover;
     filter: brightness(0.6);
-    transition: opacity 0.3s ease;
   }
-  .banner-overlay {
-    position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.3);
+  #banner.empty {
+    background: #59107d; /* fallback if no banner */
   }
-  .banner-controls {
-    position: absolute;
-    top: 10px; right: 10px;
+  #bannerRemoveBtn {
+    position: absolute; top: 5px; right: 5px;
+    background: #0a870a;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
     z-index: 10;
   }
-  .banner-controls button {
-    background: rgba(0,0,0,0.5);
-    border: none;
-    color: #fff;
-    padding: 6px 10px;
-    margin-left: 5px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  .avatar-wrapper {
+  #avatarWrapper {
     position: absolute;
-    border: 4px solid #2a7b19;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid #0a870a;
     border-radius: 50%;
-    overflow: hidden;
-    background: #222;
+    width: 140px; height: 140px;
+    background: #fff;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px #2a7b19;
+    overflow: hidden;
   }
-  /* Центрирование аватарки для профиля */
-  .profile .avatar-wrapper {
-    top: 220px;
-    left: 50%;
-    width: 160px; height: 160px;
-    transform: translateX(-50%);
-    z-index: 15;
+  #avatar {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
   }
-  /* Аватарка в левом верхнем углу для остальных вкладок */
-  .other .avatar-wrapper {
-    top: 20px;
-    left: 20px;
-    width: 80px; height: 80px;
-    transform: none;
-    z-index: 15;
-    box-shadow: 0 0 6px #2a7b19;
+  #avatar.empty {
+    background: #aaa;
   }
-  .avatar-wrapper img {
-    width: 100%; height: 100%; object-fit: cover;
-  }
-  .nickname {
+  #username {
     position: absolute;
-    color: #a0e7a0;
-    font-weight: 700;
-    text-shadow: 0 0 5px #2a7b19;
-    user-select: none;
-  }
-  /* Ник рядом с аватаркой */
-  .profile .nickname {
-    top: 390px;
+    bottom: -85px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 28px;
-    z-index: 15;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #0a870a;
+    text-shadow: 0 0 6px black;
   }
-  .other .nickname {
-    top: 30px;
-    left: 110px;
-    font-size: 18px;
+  main {
+    flex: 1;
+    padding-top: 100px;
+    max-width: 900px;
+    margin: 0 auto 40px;
+    width: 100%;
   }
-  /* Скрываем input file */
-  input[type="file"] {
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  nav button {
+    background: #0a870a;
+    border: none;
+    padding: 10px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  nav button.active,
+  nav button:hover {
+    background: #12d412;
+  }
+  section {
     display: none;
   }
-  /* Контент вкладок */
-  .tab-content {
-    margin-top: 80px;
+  section.active {
+    display: block;
   }
-  /* Общие посты */
-  .posts {
+  /* ПРОФИЛЬ */
+  #profileSection {
+    text-align: center;
+  }
+  #statusInput {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: none;
+    margin-top: 15px;
+  }
+  /* ОБЩЕЕ */
+  #postsList {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 20px;
+    gap: 20px;
+    justify-content: center;
   }
-  .post {
+  .postCard {
     background: rgba(0,0,0,0.3);
-    border-radius: 10px;
-    width: 280px;
+    border-radius: 15px;
+    width: 260px;
+    box-shadow: 0 0 8px #0a870a;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    cursor: default;
+    display: flex;
+    flex-direction: column;
   }
-  .post img {
+  .postCaption {
+    background: rgba(10,135,10,0.9);
+    padding: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+  }
+  .postImage {
     width: 100%;
     height: 180px;
     object-fit: cover;
-  }
-  .post-caption {
-    padding: 10px;
-    color: #f0d;
-    font-weight: 600;
-    background: rgba(255,255,255,0.05);
-  }
-  .post-hashtags {
-    padding: 0 10px 10px;
-    font-size: 14px;
-    color: #a0e7a0;
-    font-style: italic;
-  }
-  /* Форма добавления */
-  form {
-    max-width: 500px;
-    background: rgba(0,0,0,0.25);
-    padding: 20px;
-    border-radius: 12px;
-  }
-  form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 700;
-  }
-  form input[type="text"], form textarea {
-    width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    border: none;
-    margin-bottom: 15px;
-    font-size: 16px;
-  }
-  form textarea {
-    resize: vertical;
-    height: 80px;
-  }
-  form button {
-    background: #3a9d23;
-    border: none;
-    padding: 12px 25px;
-    font-weight: 700;
-    color: #fff;
-    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s ease;
   }
-  form button:hover {
-    background: #2a7b19;
+  .postHashtags {
+    font-size: 0.85rem;
+    color: #b3ffb3;
+    padding: 5px 8px 8px;
+  }
+  /* ДОБАВИТЬ */
+  #addForm {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  #addForm input[type="text"],
+  #addForm textarea {
+    padding: 10px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: none;
+    resize: vertical;
+  }
+  #addForm input[type="file"] {
+    font-size: 1rem;
+    color: white;
+  }
+  #addForm button {
+    background: #0a870a;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  #addForm button:hover {
+    background: #12d412;
   }
 </style>
 </head>
 <body>
+
 <header>
-  <button id="tab-profile" class="active">Профиль</button>
-  <button id="tab-general">Общее</button>
-  <button id="tab-add">Добавить</button>
+  <img id="banner" class="empty" alt="Banner" />
+  <button id="bannerRemoveBtn" title="Удалить баннер" style="display:none;">✕</button>
+
+  <label id="avatarWrapper" title="Нажмите, чтобы сменить аватар">
+    <img id="avatar" class="empty" alt="Avatar" />
+    <input type="file" id="avatarInput" accept="image/*" style="display:none" />
+  </label>
+  <div id="username" contenteditable="true" spellcheck="false" title="Нажмите, чтобы изменить ник">Lucas_14kvard</div>
 </header>
 
+<nav>
+  <button id="tabProfile" class="active">Профиль</button>
+  <button id="tabGeneral">Общее</button>
+  <button id="tabAdd">Добавить</button>
+</nav>
+
 <main>
-  <!-- Профиль -->
-  <section id="profile" class="tab-content profile">
-    <div class="profile-header" id="profile-banner-container">
-      <img src="" alt="Баннер" class="banner-image" id="profile-banner" />
-      <div class="banner-overlay"></div>
-      <div class="banner-controls">
-        <button id="upload-banner-btn">Загрузить баннер</button>
-        <button id="remove-banner-btn" style="display:none;">Удалить баннер</button>
-        <input type="file" id="banner-input" accept="image/*" />
-      </div>
-      <div class="avatar-wrapper" id="avatar-wrapper-profile" title="Нажмите чтобы сменить аватар">
-        <img src="" alt="Аватар" id="profile-avatar" />
-        <input type="file" id="avatar-input-profile" accept="image/*" />
-      </div>
-      <div class="nickname" id="profile-nickname">Lucas_14kvard</div>
-    </div>
+  <section id="profileSection" class="active">
+    <input id="statusInput" type="text" placeholder="Введите статус..." />
   </section>
 
-  <!-- Общее -->
-  <section id="general" class="tab-content other" style="display:none;">
-    <div class="avatar-wrapper" id="avatar-wrapper-general" title="Ваш аватар">
-      <img src="" alt="Аватар" id="general-avatar" />
-    </div>
-    <div class="nickname" id="general-nickname">Lucas_14kvard</div>
-    <div class="posts" id="posts-container"></div>
+  <section id="generalSection">
+    <div id="postsList"></div>
   </section>
 
-  <!-- Добавить -->
-  <section id="add" class="tab-content other" style="display:none;">
-    <div class="avatar-wrapper" id="avatar-wrapper-add" title="Ваш аватар">
-      <img src="" alt="Аватар" id="add-avatar" />
-    </div>
-    <div class="nickname" id="add-nickname">Lucas_
+  <section id="addSection">
+    <form id="addForm">
+      <textarea id="postCaption" placeholder="Подпись к фото..." rows="3" required></textarea>
+      <input id="postHashtags" type="text" placeholder="Хештеги через пробел, например: #булочки #аквапарк" />
+      <input id="postImageInput" type="file" accept="image/*" required />
+      <button type="submit">Опубликовать</button>
+    </form>
+  </section>
+</main>
+
+<script>
+  // Элементы
+  const tabProfile = document.getElementById('tabProfile');
+  const tabGeneral = document.getElementById('tabGeneral');
+  const tabAdd = document.getElementById('tabAdd');
+
+  const profileSection = document.getElementById('profileSection');
+  const generalSection = document.getElementById('generalSection');
+  const addSection = document.getElementById('addSection');
+
+  const avatarWrapper = document.getElementById('avatarWrapper');
+  const avatar = document.getElementById('avatar');
+  const avatarInput = document.getElementById('avatarInput');
+
+  const banner = document.getElementById('banner');
+  const bannerRemoveBtn = document.getElementById('bannerRemoveBtn');
+
+  const username = document.getElementById('username');
+  const statusInput = document.getElementById('statusInput');
+
+  const postsList = document.getElementById('postsList');
+  const addForm = document.getElementById('addForm');
+  const postCaption = document.getElementById('postCaption');
+  const postHashtags = document.getElementById('postHashtags');
+  const postImageInput = document.getElementById('postImageInput');
+
+  // Вкладки переключение
+  function setActiveTab(tab) {
+    tabProfile.classList.remove('active');
+    tabGeneral.classList.remove('active');
+    tabAdd.classList
